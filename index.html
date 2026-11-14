@@ -17,7 +17,7 @@ html,body{margin:0;padding:0;min-height:100%}
 body{
   font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
   color:var(--ink);
-  background:radial-gradient(120% 80% at 50% 0%,#2c4178 0%,var(--night2) 42%,var(--night1) 100%);
+  background:radial-gradient(120% 80% at 50% 0%,var(--sky,#2c4178) 0%,var(--night2) 42%,var(--night1) 100%);
   background-attachment:fixed;overflow-x:hidden;
 }
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -183,6 +183,31 @@ label.lab{display:block;font-size:12px;font-weight:800;color:var(--ink2);margin:
 .foot a{color:#ffdfae}
 @media (max-height:700px){:root{--tree-h:min(40vh,340px)}}
 </style>
+<style data-note="local-theme">
+/* 换装：只改本机 CSS 变量，不加载任何外部资源 */
+body[data-theme="ice"]{
+ --sky:#3b7fb5;--night1:#071a2e;--night2:#123a5c;--night3:#1d5480;
+ --cream:#f3fbff;--cream2:#dff1ff;--ink:#183a52;--ink2:#4d7692;
+ --red:#3f92cf;--red2:#22608f;--gold:#8fd8ff;--green:#2f8f8f;
+}
+body[data-theme="candy"]{
+ --sky:#a34a8c;--night1:#2b0f2e;--night2:#5b2050;--night3:#8a3570;
+ --cream:#fff5fb;--cream2:#ffe4f4;--ink:#4a2140;--ink2:#96608a;
+ --red:#e0559a;--red2:#b33576;--gold:#ffd166;--green:#5a9e78;
+}
+body[data-theme="ice"] .topbar,body[data-theme="ice"] .topbar button{color:#dff4ff}
+body[data-theme="candy"] .topbar,body[data-theme="candy"] .topbar button{color:#ffe8f6}
+body[data-theme="ice"] .hero-title{color:#f2fbff}
+body[data-theme="candy"] .hero-title{color:#fff0fa}
+body[data-theme="ice"] .hero-sub{color:#bfe6ff}
+body[data-theme="candy"] .hero-sub{color:#ffd0ee}
+body[data-theme="ice"] .card{border-color:#dff1ff}
+body[data-theme="candy"] .card{border-color:#ffe0f2}
+body[data-theme="ice"] .btn.ghost{background:#dff1ff;color:#2b5e80;box-shadow:0 4px 0 #b9d9ef}
+body[data-theme="candy"] .btn.ghost{background:#ffe4f4;color:#8c3a70;box-shadow:0 4px 0 #f3c2de}
+body[data-theme="ice"] .steps li{background:#e6f6ff}
+body[data-theme="candy"] .steps li{background:#fff0f8}
+</style>
 </head>
 <body data-page-node-id="ehG1UC75Y3pjfZsvLS8pz9">
 <div data-page-node-id="O2AdH75gvtN4gNk9nBpkcH" id="snow"></div>
@@ -283,6 +308,66 @@ function copy(text,okMsg){
 }
 function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');
  if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+
+/* ═══════════════ 新增：本地换装 ═══════════════ */
+var THEMES=[{id:'classic',name:'🎄 经典红金'},{id:'ice',name:'❄️ 冰雪蓝'},{id:'candy',name:'🍬 糖果粉'}];
+var theme=store('xm_theme')||'classic';
+function themeIndex(){for(var i=0;i<THEMES.length;i++)if(THEMES[i].id===theme)return i;return 0}
+function applyTheme(){
+ if(theme!=='classic'&&theme!=='ice'&&theme!=='candy')theme='classic';
+ document.body.setAttribute('data-theme',theme);
+ document.querySelectorAll('[data-act="theme"]').forEach(function(b){b.textContent='🎨 换装'});
+}
+function cycleTheme(){
+ theme=THEMES[(themeIndex()+1)%THEMES.length].id;
+ store('xm_theme',theme);applyTheme();sfxTap();
+ toast('已换装：'+THEMES[themeIndex()].name+' · 只保存在你本机');
+}
+
+/* ═══════════════ 新增：本地备份（不联网、不上传） ═══════════════ */
+var BACKUP_APP='xmas-tree';
+function exportBackup(){
+ var data={},n=0;
+ try{
+  for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);
+   if(k&&k.indexOf('xm_')===0){data[k]=localStorage.getItem(k);n++}}
+ }catch(e){toast('读取本机数据失败');return}
+ if(!n){toast('本机还没有可备份的数据');return}
+ var payload=JSON.stringify({app:BACKUP_APP,v:1,exportedAt:new Date().toISOString(),data:data},null,2);
+ var url=URL.createObjectURL(new Blob([payload],{type:'application/json'}));
+ var a=el('a');a.href=url;a.download='我的圣诞树-备份-'+new Date().toISOString().slice(0,10)+'.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000);
+ toast('备份已下载到本机（'+n+' 项）🎄');
+}
+function pickBackupFile(){
+ var inp=el('input');inp.type='file';inp.accept='.json,application/json';inp.style.cssText='position:fixed;opacity:0';
+ document.body.appendChild(inp);
+ inp.onchange=function(){
+  var f=inp.files&&inp.files[0];inp.remove();if(!f)return;
+  var fr=new FileReader();
+  fr.onload=function(){
+   try{
+    var o=JSON.parse(fr.result);
+    if(!o||o.app!==BACKUP_APP||o.v!==1||!o.data||typeof o.data!=='object')throw new Error('bad');
+    var keys=Object.keys(o.data).filter(function(k){return k.indexOf('xm_')===0&&typeof o.data[k]==='string'});
+    if(!keys.length)throw new Error('empty');
+    keys.forEach(function(k){localStorage.setItem(k,o.data[k])});
+    theme=store('xm_theme')||'classic';applyTheme();
+    toast('已恢复 '+keys.length+' 项本地记录 🎄');
+    setTimeout(route,60);
+   }catch(e){toast('备份文件无效或已损坏')}
+  };
+  fr.onerror=function(){toast('读取文件失败')};
+  fr.readAsText(f);
+ };
+ inp.click();
+}
+function backupRow(card){
+ var r=el('div','btn-row');
+ r.appendChild(btn('💾 导出备份','ghost small',exportBackup));
+ r.appendChild(btn('📂 导入备份','ghost small',pickBackupFile));
+ card.appendChild(r);
+}
 function pause(ms){return new Promise(function(r){setTimeout(r,ms)})}
 var soundOn=true,AC=null;
 function tone(freq,dur,type,vol,delay){
@@ -410,9 +495,10 @@ var app=$('#app');
 function scene(cls){
  app.innerHTML='';
  var bar=el('div','topbar','<span class="brand">🎄 XMAS TREE</span><span style="display:flex;gap:6px">'+
-  '<button data-act="sound">'+(soundOn?'🔊 音效':'🔇 静音')+'</button><button data-act="help">❓ 玩法</button></span>');
+  '<button data-act="sound">'+(soundOn?'🔊 音效':'🔇 静音')+'</button><button data-act="theme">🎨 换装</button><button data-act="help">❓ 玩法</button></span>');
  app.appendChild(bar);
  $('[data-act="sound"]',bar).onclick=function(){soundOn=!soundOn;this.textContent=soundOn?'🔊 音效':'🔇 静音';if(soundOn)sfxTap()};
+ $('[data-act="theme"]',bar).onclick=cycleTheme;
  $('[data-act="help"]',bar).onclick=showHelp;
  return app;
 }
@@ -426,6 +512,7 @@ function showHelp(){
  '<p><b>④ 回传</b>：朋友把「结果码」发给主人，主人粘贴导入，球就挂上自己的树，并进入排行榜。越懂你，挂得越高。</p>'+
  '<div class="divider">关于与声明</div>'+
  '<p>本页是<b>为学习与朋友间娱乐而独立编写</b>的小作品，玩法灵感来自 Cloudz.fun 的「Where is your spot on my Christmas tree?」。<b>与 Cloudz.fun 及其运营方无任何关联，也不是其官方产品。</b>页面里的题目、文案、SVG 插画、动画与代码均为独立编写，未使用对方的图片、音频、文案、代码或商标。全程不收集、不上传任何个人信息，数据只保存在你自己的浏览器里。如权利方认为有不妥之处，可随时要求下线删除。</p>'+
+ '<p class="hint" style="text-align:left;margin-top:10px">🆕 仓库版另加「🎨 换装」与「💾 本地备份」两个小功能：都只在本机运行，不新增网络请求、不上传任何数据、不引入第三方素材，也不改变以上声明。</p>'+
  '</div>';
  c.appendChild(btn('知道啦，去玩 🎄','gold',function(){ov.remove()}));
  ov.appendChild(c);document.body.appendChild(ov);ov.onclick=function(e){if(e.target===ov)ov.remove()};
@@ -450,6 +537,7 @@ function landing(){
  row.appendChild(btn('🌲 看示例树','ghost small',function(){sfxTap();demo()}));
  row.appendChild(btn('📥 导入结果码','ghost small',function(){sfxTap();importPrompt()}));
  c.appendChild(row);
+ backupRow(c);
  if(store('xm_quiz'))c.appendChild(btn('回到我的树 🎁','red small',function(){myTree()}));
  c.appendChild(el('p','hint','纯前端小游戏 · 无需登录 · 不上传任何数据'));
  root.appendChild(c);
@@ -720,6 +808,7 @@ function myTree(){
  c.appendChild(row);
  c.appendChild(btn('🌲 看看示例树（挂满朋友）','ghost small',function(){demo()}));
  c.appendChild(btn('← 回首页','ghost small',function(){location.hash=''}));
+ backupRow(c);
  root.appendChild(c);
  root.appendChild(el('p','foot','朋友记录保存在本机浏览器 · 换设备不会同步（这就是没有服务器的代价 😉）'));
 }
@@ -807,6 +896,7 @@ function route(){
  landing();
 }
 window.addEventListener('hashchange',route);
+applyTheme();
 route();
 })();
 </script>
