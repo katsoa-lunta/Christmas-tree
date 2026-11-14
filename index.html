@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html data-page-node-id="7hM4LOcDPWOxtktNlyVUiz" lang="zh-CN">
+<head data-page-node-id="SxhHKAZeYZKqjP9wEFARB0">
+<script data-page-node-id="MrZ1Z6HxfiVcKl5NZC53Km" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="9ppnKMTEVLo6Q0QInSUY6E" charset="utf-8">
+<meta data-page-node-id="XBMk8ueLRqhzXj5DYv1UUS" content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
+<title data-page-node-id="pDsAvBSmtasLoweaobiuDx" data-pnid-children="apEmveKVvD90OS7fwVyvh7">我的圣诞树上，你在哪儿？🎄</title>
+<style data-page-node-id="vfD9oq77SBDNDMfqD0Uzyu" data-pnid-children="JiZqDdHsbPuxqLyyYUknhO">
+:root{
+  --night1:#0b1533; --night2:#1b2a57; --night3:#2b3f73;
+  --cream:#fff8ea; --cream2:#ffefd6; --ink:#3b2a22; --ink2:#7a6558;
+  --red:#d8394a; --red2:#a92235; --gold:#f2c14e; --green:#2f7d5b;
+  --tree-h:min(46vh,410px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  color:var(--ink);
+  background:radial-gradient(120% 80% at 50% 0%,#2c4178 0%,var(--night2) 42%,var(--night1) 100%);
+  background-attachment:fixed;overflow-x:hidden;
+}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(60% 40% at 18% 18%,rgba(255,220,140,.10),transparent 70%),
+             radial-gradient(50% 35% at 85% 30%,rgba(120,190,255,.10),transparent 70%)}
+#snow{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+.flake{position:absolute;top:-12px;color:#fff;opacity:.65;animation:fall linear infinite;text-shadow:0 0 6px rgba(255,255,255,.5)}
+@keyframes fall{to{transform:translateY(105vh) translateX(30px) rotate(360deg)}}
+#app{position:relative;z-index:2;max-width:480px;margin:0 auto;padding:0 14px 46px;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 4px 8px;color:#ffe9c2;font-size:13px;font-weight:700;letter-spacing:.5px}
+.topbar .brand{display:flex;align-items:center;gap:7px}
+.topbar button{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#ffe9c2;border-radius:20px;padding:5px 11px;font-size:12px;cursor:pointer}
+.topbar button:hover{background:rgba(255,255,255,.18)}
+h1,h2,h3,p{margin:0}
+.hero-title{text-align:center;color:#fff5dc;font-size:clamp(25px,7.4vw,34px);line-height:1.3;font-weight:800;margin:10px 0 6px;text-shadow:0 3px 0 rgba(0,0,0,.18)}
+.hero-sub{text-align:center;color:#ffdfae;font-size:13px;opacity:.92;margin-bottom:14px}
+.card{background:var(--cream);border-radius:22px;padding:20px 18px;box-shadow:0 14px 0 rgba(0,0,0,.16),0 20px 40px rgba(0,0,0,.28);margin:12px 0;border:2px solid #fff}
+.card h2{font-size:18px;text-align:center;margin-bottom:6px}
+.card .sub{text-align:center;color:var(--ink2);font-size:13px;line-height:1.6;margin-bottom:14px}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:14px 16px;font-size:16px;font-weight:800;cursor:pointer;
+  font-family:inherit;transition:transform .12s,filter .12s;box-shadow:0 5px 0 rgba(0,0,0,.18)}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn.gold{background:linear-gradient(180deg,#ffd970,#f0a93a);color:#5a3407;text-shadow:0 1px 0 rgba(255,255,255,.5)}
+.btn.red{background:linear-gradient(180deg,#ef5b68,#c62c40);color:#fff}
+.btn.ghost{background:#f3e5cf;color:#7a5a3c;box-shadow:0 4px 0 #ddc9ab}
+.btn.small{font-size:13px;padding:10px 12px;border-radius:12px}
+.btn:disabled{opacity:.55;cursor:default}
+.btn-row{display:flex;gap:9px;margin-top:10px}
+.btn-row .btn{flex:1}
+.input{width:100%;border:2px solid #e8d5b7;background:#fffdf7;border-radius:14px;padding:13px 14px;font-size:16px;font-family:inherit;color:var(--ink);outline:none}
+.input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(242,193,78,.25)}
+label.lab{display:block;font-size:12px;font-weight:800;color:var(--ink2);margin:12px 0 6px;letter-spacing:.3px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:2px solid #e8d5b7;background:#fffdf7;border-radius:999px;padding:8px 12px;font-size:14px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.chip.on{border-color:var(--red);background:#ffe4e2;color:var(--red2);font-weight:800}
+.hint{font-size:11px;color:#a18d78;text-align:center;margin-top:10px;line-height:1.6}
+.err{color:#c22a3c;font-size:12px;text-align:center;min-height:16px;margin-top:6px}
+.steps{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}
+.steps li{display:flex;gap:11px;align-items:flex-start;background:#fff3dd;border-radius:14px;padding:11px 12px;font-size:13px;line-height:1.5}
+.steps b{font-weight:800}
+.steps li > b{background:var(--red);color:#fff;width:22px;height:22px;flex:0 0 22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800}
+.divider{display:flex;align-items:center;gap:10px;color:#c7ad8d;font-size:12px;margin:16px 0 10px}
+.divider::before,.divider::after{content:"";height:1px;background:#e5d2b4;flex:1}
+
+/* ── 树舞台 ── */
+.tree-wrap{position:relative;display:flex;justify-content:center;margin:6px auto 0;height:var(--tree-h);filter:drop-shadow(0 18px 24px rgba(0,0,0,.4))}
+.tree-stage{position:relative;height:100%;width:calc(var(--tree-h)/2);border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg,#16254d 0%,#20335f 55%,#2b406e 100%);box-shadow:inset 0 0 60px rgba(0,0,0,.35)}
+.tree-stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12%;
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.30));pointer-events:none}
+.tree-svg{position:absolute;inset:0;width:100%;height:100%}
+.tree-layer{position:absolute;inset:0;pointer-events:none}
+.tree-layer > *{pointer-events:auto}
+.glow{position:absolute;left:50%;top:22%;width:150%;height:75%;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(255,214,120,.22),transparent 65%);pointer-events:none;opacity:0;transition:opacity 1s}
+.tree-stage.lit .glow{opacity:1}
+.tier{opacity:.22;transition:opacity .55s}
+.tier.on{opacity:1}
+.bulb{animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.star-glow{opacity:0;transition:opacity .8s}
+.tree-stage.starred .star-glow{opacity:1;animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.18);opacity:1}}
+.deco{position:absolute;transform:translate(-50%,-50%);font-size:calc(var(--tree-h)*.036);line-height:1;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.5));animation:swing 3.4s ease-in-out infinite}
+.deco.new{animation:dropin .6s cubic-bezier(.2,1.5,.5,1)}
+@keyframes dropin{from{transform:translate(-50%,-260%) scale(.4);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+@keyframes swing{0%,100%{rotate:-6deg}50%{rotate:6deg}}
+.bauble{position:absolute;transform:translate(-50%,-50%);width:15%;text-align:center;
+  transition:left .75s cubic-bezier(.22,1,.36,1),top .75s cubic-bezier(.22,1,.36,1),width .4s}
+.bauble .hook{width:1px;height:14%;margin:0 auto;background:linear-gradient(#e8d9b0,#9c8b64)}
+.bauble .cap{width:24%;height:5%;margin:0 auto;border-radius:3px 3px 1px 1px;background:linear-gradient(90deg,#b8912f,#ffe9a0,#a67c22)}
+.bauble .glass{width:100%;aspect-ratio:1;border-radius:50%;position:relative;overflow:hidden;
+  background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.92),rgba(255,255,255,.18) 24%,transparent 42%),
+             radial-gradient(circle at 70% 80%,var(--b2),var(--b1) 55%,var(--b2) 100%);
+  border:1px solid rgba(255,255,255,.65);box-shadow:inset -6px -8px 14px rgba(0,0,0,.28),0 4px 10px rgba(0,0,0,.35)}
+.bauble .glass::after{content:"";position:absolute;left:16%;top:8%;width:36%;height:22%;border-radius:50%;
+  background:rgba(255,255,255,.65);filter:blur(2px);transform:rotate(-25deg)}
+.bauble .nm{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:96%;color:#fff;font-weight:800;
+  text-shadow:0 1px 3px rgba(0,0,0,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:calc(var(--tree-h)*.022)}
+.bauble .tag{font-size:calc(var(--tree-h)*.017);color:#fff4d8;background:rgba(30,20,50,.62);border-radius:8px;
+  padding:1px 5px;margin:3px auto 0;display:inline-block;white-space:nowrap;max-width:150%;overflow:hidden;text-overflow:ellipsis}
+.bauble.gold .glass{--b1:#ffd76a!important;--b2:#b8800d!important;box-shadow:inset -6px -8px 14px rgba(0,0,0,.3),0 0 18px rgba(255,210,90,.9)}
+.bauble.gold .nm{color:#5a3407;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.bauble.small{width:10%;opacity:.92}
+.bauble.small .tag{display:none}
+.bauble.small .nm{font-size:calc(var(--tree-h)*.015)}
+.bauble.friend{width:19%;z-index:5}
+.bauble.friend .nm{font-size:calc(var(--tree-h)*.026)}
+.bauble.shake{animation:shake .45s}
+@keyframes shake{0%,100%{rotate:0}25%{rotate:-9deg}75%{rotate:9deg}}
+.bauble.wobble .glass{animation:swing 2.2s ease-in-out infinite}
+.spark{position:absolute;width:5px;height:5px;border-radius:50%;pointer-events:none;animation:spark .8s ease-out forwards}
+@keyframes spark{to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+.confetti{position:absolute;top:-10%;width:8px;height:13px;border-radius:2px;pointer-events:none;animation:conf 2.4s linear forwards}
+@keyframes conf{to{transform:translateY(760px) rotate(720deg);opacity:.15}}
+.host{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);font-size:calc(var(--tree-h)*.085);
+  filter:drop-shadow(0 4px 5px rgba(0,0,0,.5));z-index:6}
+.bubble{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);background:#fff8ea;color:var(--ink);
+  font-size:calc(var(--tree-h)*.029);font-weight:700;padding:6px 11px;border-radius:12px;text-align:center;
+  white-space:normal;max-width:84%;line-height:1.35;box-shadow:0 4px 10px rgba(0,0,0,.3);z-index:8}
+
+/* ── 答题面板 ── */
+.ribbon{position:relative;margin:-6px auto 12px;width:88%;background:linear-gradient(180deg,#ef5b68,#c62c40);
+  color:#fff8ea;text-align:center;font-weight:800;font-size:13px;padding:9px 12px;border-radius:8px;
+  box-shadow:0 5px 0 #8f1c2b,0 8px 14px rgba(0,0,0,.25)}
+.ribbon::before,.ribbon::after{content:"";position:absolute;top:6px;width:0;height:0;border:9px solid transparent}
+.ribbon::before{left:-12px;border-right-color:#8f1c2b}
+.ribbon::after{right:-12px;border-left-color:#8f1c2b}
+.meter{display:flex;justify-content:center;gap:5px;margin:0 0 14px}
+.meter i{width:13px;height:13px;border-radius:50%;background:#dfcdb0;box-shadow:inset 0 2px 3px rgba(0,0,0,.18);transition:.3s}
+.meter i.on{background:radial-gradient(circle at 35% 30%,#fff6c0,#ffc23c);box-shadow:0 0 9px #ffc23c}
+.qtext{font-size:17px;font-weight:800;line-height:1.5;text-align:center;margin:4px 0 16px;min-height:50px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.opts.one{grid-template-columns:1fr}
+.opt{position:relative;border:2px solid #e8d5b7;background:#fffdf7;border-radius:15px;padding:13px 9px;
+  font-family:inherit;font-size:14px;font-weight:700;color:var(--ink);cursor:pointer;line-height:1.35;
+  transition:transform .15s,background .2s,border-color .2s;box-shadow:0 4px 0 #e3d0b3}
+.opt:hover{transform:translateY(-2px)}
+.opt.picked{transform:scale(.97)}
+.opt.right{background:#d9f5e3;border-color:#38a46c;color:#1c6b43;box-shadow:0 4px 0 #9ed8b7}
+.opt.wrong{background:#ffe0e0;border-color:#d8515c;color:#a52b36;box-shadow:0 4px 0 #efa9ad}
+.opt.answer{background:#d9f5e3;border-color:#38a46c;animation:glow 1s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 16px rgba(56,164,108,.6)}}
+.opt .flag{position:absolute;right:6px;top:-10px;font-size:16px}
+.feedback{text-align:center;font-weight:800;font-size:14px;min-height:22px;margin-top:12px}
+.feedback.ok{color:#1c8a55}.feedback.no{color:#c22a3c}
+.skip{display:block;margin:14px auto 0;background:none;border:0;color:#a18d78;font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit}
+
+/* ── 分享 / 看板 ── */
+.codebox{background:#fffdf7;border:2px dashed #d9bd94;border-radius:14px;padding:11px;font-size:11px;
+  word-break:break-all;color:#7a6558;max-height:90px;overflow:auto;line-height:1.5}
+.share-note{background:#fff0d3;border-radius:12px;padding:11px 12px;font-size:12px;line-height:1.65;color:#7a5a3c;margin:12px 0}
+.board{max-height:270px;overflow:auto;margin-top:10px}
+.row{display:flex;align-items:center;gap:9px;background:#fff3dd;border-radius:12px;padding:9px 10px;margin-bottom:7px;cursor:default}
+.row .rank{width:22px;font-weight:800;color:#b08a55;text-align:center;font-size:13px}
+.row .mini{width:22px;height:22px;border-radius:50%;flex:0 0 22px;
+  background:radial-gradient(circle at 30% 25%,#fff,transparent 40%),radial-gradient(circle at 70% 80%,var(--b2),var(--b1));border:1px solid rgba(255,255,255,.7)}
+.row .main{flex:1;min-width:0}
+.row .main strong{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .meta{font-size:11px;color:#9a8065}
+.row .zone{font-weight:800;color:var(--red2)}
+.row .score{margin-left:6px;font-weight:800;color:#4a7a5e}
+.row.you{outline:2px solid var(--gold)}
+.row .del{border:0;background:none;color:#c9a98a;font-size:18px;cursor:pointer;line-height:1}
+.empty{text-align:center;color:#a18d78;font-size:13px;padding:18px 4px}
+.end-title{text-align:center;font-size:24px;font-weight:800;color:var(--red2);margin:6px 0 8px}
+.end-score{text-align:center;font-size:40px;font-weight:800;color:#c9922a;line-height:1.1}
+.end-score small{font-size:16px;color:#a18d78}
+.end-desc{text-align:center;font-size:14px;line-height:1.7;color:var(--ink2);margin:10px 0 4px}
+.badge{display:inline-block;background:#fff0d3;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:800;color:#a9702a;margin:0 auto}
+.result-hero{text-align:center;font-size:calc(var(--tree-h)*.13);line-height:1}
+.help-body{font-size:13px;line-height:1.85;color:var(--ink2)}
+.help-body b{color:var(--ink)}
+.help-body code{background:#f0e2c8;padding:1px 5px;border-radius:5px;font-size:11px}
+.overlay{position:fixed;inset:0;background:rgba(6,12,30,.72);z-index:80;display:grid;place-items:center;padding:18px}
+.overlay .card{max-width:420px;max-height:82vh;overflow:auto}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:#fff8ea;color:#4a3323;
+  padding:11px 18px;border-radius:14px;font-size:13px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.35);
+  opacity:0;pointer-events:none;transition:.25s;z-index:90;max-width:88vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.foot{text-align:center;color:#9fb0d6;font-size:11px;margin-top:20px;line-height:1.7}
+.foot a{color:#ffdfae}
+@media (max-height:700px){:root{--tree-h:min(40vh,340px)}}
+</style>
+</head>
+<body data-page-node-id="ehG1UC75Y3pjfZsvLS8pz9">
+<div data-page-node-id="O2AdH75gvtN4gNk9nBpkcH" id="snow"></div>
+<div data-page-node-id="HLVVRsI84J1GDzbzceZj35" id="app"></div>
+<div data-page-node-id="aagjb1wdhYl3SipiOV8lky" id="toast"></div>
+<script data-page-node-id="PhOG2ASEJCojnxBDVnNoIX" data-pnid-children="ibQardNKciUuP02XU5F4Qf">
+(function(){
+'use strict';
+
+/* ═══════════════ 题库（24 道，创建者随机抽 10 道；也可自己出题） ═══════════════ */
+var BANK=[
+ {q:'{name}是猫派还是狗派？',o:['🐱 猫派','🐶 狗派']},
+ {q:'{name}早上第一口喝什么？',o:['☕ 咖啡','🍵 茶','🥛 牛奶','🧃 果汁']},
+ {q:'{name}的完美周末是？',o:['🛌 睡到自然醒','🧗 出门探险','🎮 在家打游戏','👯 找朋友玩']},
+ {q:'{name}是早起型还是夜猫子？',o:['🌅 天一亮就起','🦉 深夜最精神']},
+ {q:'{name}最爱的甜点？',o:['🍰 蛋糕','🍨 冰淇淋','🍩 甜甜圈','🍬 传统点心']},
+ {q:'看悲伤电影时，{name}会…',o:['😭 哭得稀里哗啦','🥺 强忍眼泪','🙄 只是眼睛进沙子','😐 一滴泪都没有']},
+ {q:'{name}发消息还是打电话？',o:['💬 发消息','📞 打电话']},
+ {q:'{name}和钱的关系？',o:['🐷 一分一分攒','🛍️ 马上花光']},
+ {q:'{name}最爱的天气？',o:['☀️ 大晴天','☔ 下雨天','🧣 冷天窝着','🍃 微风舒适']},
+ {q:'{name}吃东西加番茄酱吗？',o:['🚫 完全不加','🍅 什么都蘸满']},
+ {q:'群里抢红包时，{name}…',o:['⚡ 秒抢','🐢 随缘','📣 只发表情包']},
+ {q:'{name}的手机未读消息？',o:['✅ 永远是 0','😵 999+']},
+ {q:'聚餐点菜，{name}会？',o:['🔁 每次点一样的','✨ 一定要试新菜']},
+ {q:'{name}最怕什么？',o:['💉 打针','🎢 过山车','🕷️ 虫子','🙈 当众发言']},
+ {q:'{name}拍照的时候…',o:['✅ 拍一两张就好','🤳 试好几次','😵 连拍二十张']},
+ {q:'{name}最常用的表情是？',o:['😂','🥺','😍','🙄']},
+ {q:'{name}能守住秘密吗？',o:['🔒 嘴严得像保险箱','📢 中午前大家都知道了']},
+ {q:'{name}梦想的假期？',o:['🏖️ 海边','🏔️ 山里','🏙️ 城市游','🎢 游乐园']},
+ {q:'{name}说"5 分钟就好"，其实是…',o:['⏰ 真的 5 分钟','⌚ 15 分钟','⏳ 半小时以上']},
+ {q:'打长途电话时，{name}…',o:['🗣️ 说个不停','🤫 主要在听']},
+ {q:'{name}在朋友群里是？',o:['📋 计划担当','🤣 开心果','🦉 军师','📣 啦啦队长']},
+ {q:'{name}怎么笑？',o:['🙂 浅浅一笑','😆 大声笑','💀 笑到邻居敲门']},
+ {q:'装饰圣诞树那天，{name}在干嘛？',o:['💪 一个人全包','📋 指挥大家挂','😴 挂一个就去睡']},
+ {q:'{name}最想把什么挂在树顶？',o:['⭐ 大星星','❄️ 闪亮雪花','🎀 超大蝴蝶结']}
+];
+var DECOS=['🔔','🍬','🎀','🍪','❄️','🔴','🎁','🌰','💛','🧊'];
+var AVATARS=['🐻','🐱','🦌','⛄','🐧','🦊'];
+var MOODS=['✨ 闪闪发光','🎄 圣诞狂热','😴 只想躺平','🎁 坐等拆礼物','☕ 暖乎乎','🎶 单曲循环'];
+var TIER_Y=[517,477,432,374,327,278,241,198,157,121];
+var NOTCH_SIDE=[-.16,.14,-.5,.46,-.44,.5,-.46,.42,-.4,.2];
+var DECO_SIDE=[-.08,-.52,.48,-.5,.52,-.46,.5,-.5,.44,-.42];
+var W=320,H=640,CX=160;
+var IN_BOX=[112,520],TOP_HOOK=[160,78],FRONT_SPOT=[160,300],LOW_BRANCH=[222,452],TINY_TWIG=[192,468];
+var ZONE_SPOTS={
+ top:[[160,78],[132,158],[188,158],[160,224]],
+ front:[[160,300],[104,324],[216,324],[160,356]],
+ bottom:[[222,452],[98,452],[160,474],[280,474]],
+ box:[[112,520],[94,528],[130,528],[112,534]]};
+var ZONE_BACK={
+ top:[[148,104],[172,104],[120,156],[200,156]],
+ front:[[132,296],[188,296],[80,352],[240,352]],
+ bottom:[[150,440],[286,480],[110,470],[200,440]],
+ box:[[102,524],[122,524],[88,532],[136,532]]};
+var BACK_RING=[[0,0],[-6,-5],[6,-5],[-6,5],[6,5],[0,-9],[-10,0],[10,0]];
+var ENDINGS={
+ top:{emoji:'🌟',title:'你在我树顶，星星旁边！',badge:'树顶 · 顶级知己',desc:'10 道题你几乎全中，我把最亮的那颗星留给了你。你大概比我自己还了解我 🥹'},
+ front:{emoji:'✨',title:'你挂在树的正中间！',badge:'C 位 · 真朋友',desc:'稳稳挂在最显眼的位置，一抬头就能看到你。不错嘛，我们很熟 😎'},
+ bottom:{emoji:'🌲',title:'你挂在最下面的树枝上',badge:'低枝 · 还有救',desc:'嗯……被挂到低处了，风一吹还会转圈圈。下次多打听点我的事再来 🌚'},
+ box:{emoji:'📦',title:'你还在礼物盒里…',badge:'盒里 · 紧急抢救',desc:'别急，我蹲下来给你找了根小树枝挂上。至少你上树了（勉强）🎁'}
+};
+var ZONE_LABEL={top:'🌟 树顶',front:'✨ C 位',bottom:'🌲 低枝',box:'📦 盒里'};
+
+/* ═══════════════ 工具 ═══════════════ */
+function $(s,r){return (r||document).querySelector(s)}
+function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!==undefined)e.innerHTML=html;return e}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function b64e(obj){
+ var b=new TextEncoder().encode(JSON.stringify(obj)),s='';
+ for(var i=0;i<b.length;i+=8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+8000));
+ return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function b64d(str){
+ var s=str.replace(/-/g,'+').replace(/_/g,'/'),bin=atob(s),b=new Uint8Array(bin.length);
+ for(var i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);
+ return JSON.parse(new TextDecoder().decode(b));
+}
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function cleanName(s){return String(s||'').replace(/[\r\n\t]/g,' ').trim().slice(0,12)}
+function hw(y){return Math.max(0,Math.min(150,(y-55)/485*150))}
+function notchPoint(n){if(n<=0)return IN_BOX;var y=TIER_Y[n-1]-20;return [CX+NOTCH_SIDE[n-1]*hw(y+8),y]}
+function decoPoint(n){var y=TIER_Y[n-1]-16;return [CX+DECO_SIDE[n-1]*hw(y+8),y]}
+function zoneOf(s){return s>=9?'top':s>=7?'front':s>=5?'bottom':'box'}
+function spotFor(zone,i){
+ if(i<4)return {pt:ZONE_SPOTS[zone][i],small:false};
+ var b=ZONE_BACK[zone],j=(i-4)%b.length,r=BACK_RING[Math.floor((i-4)/b.length)%BACK_RING.length];
+ return {pt:[b[j][0]+r[0],b[j][1]+r[1]],small:true};
+}
+function colorOf(name){var h=0;for(var i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))>>>0;
+ var hue=h%360;return ['hsl('+hue+',72%,58%)','hsl('+((hue+38)%360)+',68%,32%)']}
+function toast(msg){var t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(function(){t.classList.remove('show')},2300)}
+function copy(text,okMsg){
+ var done=function(){toast(okMsg||'已复制，快发给朋友吧 🎄')};
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fallback)}else fallback();
+ function fallback(){var ta=el('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');done()}catch(e){toast('复制失败，请手动长按选中')}ta.remove()}
+}
+function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');
+ if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}}
+function pause(ms){return new Promise(function(r){setTimeout(r,ms)})}
+var soundOn=true,AC=null;
+function tone(freq,dur,type,vol,delay){
+ if(!soundOn)return;
+ try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  var t=AC.currentTime+(delay||0),o=AC.createOscillator(),g=AC.createGain();
+  o.type=type||'sine';o.frequency.setValueAtTime(freq,t);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.05,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+(dur||.15));
+  o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+(dur||.15)+.02);
+ }catch(e){}
+}
+function sfxRight(n){tone(392+n*36,.16,'sine',.06);tone(588+n*40,.2,'sine',.04,.08)}
+function sfxWrong(){tone(220,.18,'triangle',.045);tone(165,.24,'triangle',.04,.09)}
+function sfxTap(){tone(660,.06,'sine',.035)}
+function sfxWin(z){var seq=z==='top'?[523,659,784,1047]:z==='front'?[523,659,784]:z==='bottom'?[440,523]:[392,349];
+ seq.forEach(function(f,i){tone(f,.28,'sine',.05,i*.12)})}
+
+/* ═══════════════ 数据 ═══════════════ */
+function questionsOf(q){
+ if(q.c)return q.c.map(function(x){return {q:x[0],o:x[1],a:x[2]}});
+ return q.q.map(function(x){var b=BANK[x[0]];return {q:b.q,o:b.o,a:x[1]}});
+}
+function quizId(code){return hash(code).slice(0,10)}
+function packQuiz(q){return b64e(q)}
+function unpackQuiz(code){var q=b64d(code);if(!q||q.v!==1||!q.n||!q.q)throw new Error('bad');return q}
+function quizURL(code){return location.href.split('#')[0]+'#t='+code}
+function scoreOf(q,answers){var qs=questionsOf(q),s=0;for(var i=0;i<qs.length;i++)if(answers[i]===qs[i].a)s++;return s}
+function parseCustom(text){
+ var lines=text.split('\n').map(function(l){return l.trim()}).filter(Boolean),out=[];
+ lines.forEach(function(l){var p=l.split('|').map(function(x){return x.trim()}).filter(Boolean);
+  if(p.length>=3)out.push([p[0],p.slice(1),0])});
+ return out;
+}
+function friendsKey(id){return 'xm_friends_'+id}
+function getFriends(id){return store(friendsKey(id))||[]}
+function addFriend(id,f){var list=getFriends(id);list.push(f);store(friendsKey(id),list);return list}
+
+/* ═══════════════ 树绘制 ═══════════════ */
+function treeSVG(){
+ var s='<svg class="tree-svg" viewBox="0 0 320 640" preserveAspectRatio="none" aria-hidden="true">';
+ s+='<defs><radialGradient id="glowG"><stop offset="0" stop-color="#FFF0AE" stop-opacity=".9"/><stop offset="1" stop-color="#FFD34D" stop-opacity="0"/></radialGradient>'+
+    '<linearGradient id="tg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3f9c6a"/><stop offset=".5" stop-color="#2b7150"/><stop offset="1" stop-color="#174632"/></linearGradient></defs>';
+ // 地面雪堆
+ s+='<path d="M0 596 Q60 574 120 592 Q190 610 250 586 Q290 574 320 590 L320 640 L0 640 Z" fill="#dfe9f7" opacity=".18"/>';
+ // 树干
+ s+='<rect x="150" y="520" width="20" height="76" rx="4" fill="#6b4526"/>';
+ // 五层松树
+ var layers=[[55,200,55],[140,285,82],[225,370,108],[310,455,132],[395,540,152]];
+ layers.forEach(function(L,i){
+  var top=L[0],bot=L[1],hwid=L[2],d='M160 '+top+' L'+(160-hwid)+' '+bot;
+  var seg=6,step=hwid*2/seg;
+  for(var k=0;k<seg;k++){var x0=160-hwid+k*step,x1=x0+step;d+=' Q'+(x0+step/2)+' '+(bot+11)+' '+x1+' '+bot}
+  d+=' L'+(160+hwid)+' '+bot+' Z';
+  s+='<path d="'+d+'" fill="url(#tg)" stroke="#123a27" stroke-width="2" stroke-linejoin="round" opacity="'+(0.86+i*.03)+'"/>';
+  s+='<path d="M160 '+top+' L'+(160-hwid)+' '+bot+'" fill="none" stroke="#5fbd86" stroke-width="2" opacity=".25"/>';
+ });
+ // 十层灯串
+ var COLORS=['#FF5A55','#FFD34D','#7FD1AE','#FF7EB0','#7FB6FF'];
+ for(var n=1;n<=10;n++){
+  var y=TIER_Y[n-1],hwid=hw(y)*.9,x0=CX-hwid,x2=CX+hwid,y0=y-8,y1=y+14;
+  s+='<g class="tier" data-n="'+n+'"><path d="M'+x0+' '+y0+' Q160 '+y1+' '+x2+' '+y0+'" fill="none" stroke="#22402e" stroke-width="1.8"/>';
+  var cnt=Math.max(3,Math.round(hwid*2/21));
+  for(var j=0;j<cnt;j++){
+   var tt=(j+.5)/cnt,bx=(1-tt)*(1-tt)*x0+2*(1-tt)*tt*CX+tt*tt*x2,
+       by=(1-tt)*(1-tt)*y0+2*(1-tt)*tt*y1+tt*tt*y0,c=COLORS[(j+n)%COLORS.length];
+   s+='<circle cx="'+bx.toFixed(1)+'" cy="'+(by+3).toFixed(1)+'" r="7" fill="'+c+'" opacity=".16"/>'+
+      '<circle class="bulb" cx="'+bx.toFixed(1)+'" cy="'+(by+3).toFixed(1)+'" r="3.4" fill="'+c+'" style="animation-delay:-'+((j*7+n*3)%10)/5+'s"/>';
+  }
+  s+='</g>';
+ }
+ // 星星
+ s+='<circle class="star-glow" cx="160" cy="30" r="52" fill="url(#glowG)"/>';
+ s+='<path d="M160 6 L167 24 L186 26 L171 39 L176 58 L160 48 L144 58 L149 39 L134 26 L153 24 Z" fill="#FFD75E" stroke="#fff2bb" stroke-width="1.5"/>';
+ // 礼物盒
+ s+='<g><rect x="72" y="548" width="80" height="52" rx="5" fill="#c8324a" stroke="#8e1d30" stroke-width="2"/>'+
+    '<rect x="68" y="540" width="88" height="14" rx="4" fill="#e04a5f" stroke="#8e1d30" stroke-width="2"/>'+
+    '<rect x="105" y="540" width="14" height="60" fill="#ffd75e"/><rect x="68" y="553" width="88" height="12" fill="#ffd75e"/>'+
+    '<path d="M112 540 Q92 528 100 520 Q110 516 112 540 Q114 516 124 520 Q132 528 112 540" fill="none" stroke="#ffd75e" stroke-width="4"/></g>';
+ s+='</svg>';
+ return s;
+}
+function makeTree(opts){
+ opts=opts||{};
+ var wrap=el('div','tree-wrap'),stage=el('div','tree-stage'+(opts.lit?' lit':'')+(opts.starred?' starred':''));
+ stage.innerHTML=treeSVG()+'<div class="glow"></div>';
+ var layer=el('div','tree-layer');stage.appendChild(layer);wrap.appendChild(stage);
+ if(opts.lit)stage.querySelectorAll('.tier').forEach(function(g){g.classList.add('on')});
+ var api={
+  el:stage,wrap:wrap,layer:layer,
+  place:function(node,pt){node.style.left=(pt[0]/W*100)+'%';node.style.top=(pt[1]/H*100)+'%';if(!node.parentNode)layer.appendChild(node);return node},
+  light:function(n,on){var g=stage.querySelector('.tier[data-n="'+n+'"]');if(g)g.classList.toggle('on',on!==false)},
+  lightAll:function(){stage.querySelectorAll('.tier').forEach(function(g){g.classList.add('on')});stage.classList.add('lit')},
+  star:function(on){stage.classList.toggle('starred',on!==false)},
+  sparkle:function(pt,num){
+   num=num||8;
+   for(var i=0;i<num;i++){var sp=el('i','spark');sp.style.left=(pt[0]/W*100)+'%';sp.style.top=(pt[1]/H*100)+'%';
+    sp.style.background=['#FFD34D','#FF7EB0','#7FD1AE','#fff'][i%4];
+    sp.style.setProperty('--dx',(Math.random()*70-35)+'px');sp.style.setProperty('--dy',(Math.random()*60-45)+'px');
+    layer.appendChild(sp);setTimeout(function(x){x.remove()},820,sp)}
+  },
+  confetti:function(){
+   var cs=['#FFD34D','#FFE9A0','#F2BF26','#FF7EB0','#7FD1AE','#fff'];
+   for(var i=0;i<46;i++){var c=el('i','confetti');c.style.left=(Math.random()*100)+'%';
+    c.style.background=cs[i%cs.length];c.style.animationDelay=(Math.random()*.8)+'s';
+    c.style.animationDuration=(1.8+Math.random()*1.4)+'s';layer.appendChild(c);
+    setTimeout(function(x){x.remove()},3600,c)}
+  },
+  host:function(av,txt){var hd=el('div','host',esc(AVATARS[av||0]));stage.appendChild(hd);
+   if(txt)stage.appendChild(el('span','bubble',esc(txt)));return hd}
+ };
+ return api;
+}
+function makeBauble(name,opt){
+ opt=opt||{};var c=colorOf(name||'?'),b=el('div','bauble'+(opt.small?' small':'')+(opt.gold?' gold':'')+(opt.friend?' friend':'')+(opt.cls?' '+opt.cls:''));
+ b.innerHTML='<div class="hook"></div><div class="cap"></div><div class="glass" style="--b1:'+c[0]+';--b2:'+c[1]+'"><span class="nm">'+esc(name||'?')+'</span></div>'+
+   (opt.tag?'<div class="tag">'+esc(opt.tag)+'</div>':'');
+ var nm=$('.nm',b),len=Array.from(name||'?').length,base=opt.small?.020:(opt.friend?.034:.028);
+ nm.style.fontSize='calc(var(--tree-h)*'+(len>6?base*.72:len>4?base*.86:base).toFixed(3)+')';
+ return b;
+}
+function makeDeco(k){var d=el('div','deco new',DECOS[k-1]);setTimeout(function(){d.classList.remove('new')},700);return d}
+
+/* ═══════════════ 场景框架 ═══════════════ */
+var app=$('#app');
+function scene(cls){
+ app.innerHTML='';
+ var bar=el('div','topbar','<span class="brand">🎄 XMAS TREE</span><span style="display:flex;gap:6px">'+
+  '<button data-act="sound">'+(soundOn?'🔊 音效':'🔇 静音')+'</button><button data-act="help">❓ 玩法</button></span>');
+ app.appendChild(bar);
+ $('[data-act="sound"]',bar).onclick=function(){soundOn=!soundOn;this.textContent=soundOn?'🔊 音效':'🔇 静音';if(soundOn)sfxTap()};
+ $('[data-act="help"]',bar).onclick=showHelp;
+ return app;
+}
+function btn(label,cls,fn){var b=el('button','btn '+cls,label);b.onclick=fn;return b}
+function showHelp(){
+ var ov=el('div','overlay'),c=el('div','card');
+ c.innerHTML='<h2>🎄 怎么玩</h2><div class="help-body">'+
+ '<p><b>① 树主人</b>：答 10 道关于自己的二选一题，每答一题树上就多挂一个装饰、点亮一层灯。答完生成一个专属链接。</p>'+
+ '<p><b>② 朋友</b>：打开链接，输入名字，猜这 10 题主人选了什么。<b>每答对一题，写着你名字的玻璃球就往上升一层。</b></p>'+
+ '<p><b>③ 落位</b>：9–10 分 → 树顶星星旁；7–8 分 → 树的 C 位；5–6 分 → 低枝；0–4 分 → 掉进礼物盒，最后被挂到一根小树枝上。</p>'+
+ '<p><b>④ 回传</b>：朋友把「结果码」发给主人，主人粘贴导入，球就挂上自己的树，并进入排行榜。越懂你，挂得越高。</p>'+
+ '<div class="divider">关于与声明</div>'+
+ '<p>本页是<b>为学习与朋友间娱乐而独立编写</b>的小作品，玩法灵感来自 Cloudz.fun 的「Where is your spot on my Christmas tree?」。<b>与 Cloudz.fun 及其运营方无任何关联，也不是其官方产品。</b>页面里的题目、文案、SVG 插画、动画与代码均为独立编写，未使用对方的图片、音频、文案、代码或商标。全程不收集、不上传任何个人信息，数据只保存在你自己的浏览器里。如权利方认为有不妥之处，可随时要求下线删除。</p>'+
+ '</div>';
+ c.appendChild(btn('知道啦，去玩 🎄','gold',function(){ov.remove()}));
+ ov.appendChild(c);document.body.appendChild(ov);ov.onclick=function(e){if(e.target===ov)ov.remove()};
+}
+
+/* ═══════════════ 首页 ═══════════════ */
+function landing(){
+ var root=scene();
+ var t=makeTree({lit:true,starred:true});t.wrap.style.setProperty('--tree-h','min(38vh,340px)');
+ root.appendChild(t.wrap);
+ var h=el('div','hero-title','我的圣诞树上，<br>你在哪儿？🎄');root.appendChild(h);
+ root.appendChild(el('p','hero-sub','装饰你的树，再看看哪些朋友能登上树顶'));
+ var c=el('div','card');
+ c.innerHTML='<h2>越懂我，挂得越高 ✨</h2><p class="sub">1 分钟 · 10 道关于你的小题<br>朋友答对越多，名字球越靠近星星</p>';
+ var steps=el('ul','steps');
+ steps.innerHTML='<li><b>1</b><span><b>装饰你的树</b><br>回答 10 道关于自己的小问题</span></li>'+
+  '<li><b>2</b><span><b>发给朋友</b><br>把链接甩到微信群、QQ 或朋友圈</span></li>'+
+  '<li><b>3</b><span><b>看谁登上树顶</b><br>越懂你，圣诞球挂得越高 🎄</span></li>';
+ c.appendChild(steps);
+ c.appendChild(btn('装饰我的树 🎄','gold',function(){sfxTap();create()}));
+ var row=el('div','btn-row');
+ row.appendChild(btn('🌲 看示例树','ghost small',function(){sfxTap();demo()}));
+ row.appendChild(btn('📥 导入结果码','ghost small',function(){sfxTap();importPrompt()}));
+ c.appendChild(row);
+ if(store('xm_quiz'))c.appendChild(btn('回到我的树 🎁','red small',function(){myTree()}));
+ c.appendChild(el('p','hint','纯前端小游戏 · 无需登录 · 不上传任何数据'));
+ root.appendChild(c);
+ root.appendChild(el('p','foot','玩法灵感来自 Cloudz.fun · 本页为独立编写的学习/娱乐作品，与其无关联<br>点右上角「玩法」查看完整声明 · 不收集任何数据 · <a href="#" onclick="location.hash=\'\';return false">回首页</a>'));
+ // 首页树上挂几个示意球
+ [['小雪',10],['阿哲',8],['Momo',5],['大熊',3]].forEach(function(x,i){
+  var z=zoneOf(x[1]),b=makeBauble(x[0],{friend:i===0,small:i>0,gold:x[1]===10});
+  t.place(b,spotFor(z,0).pt);
+ });
+}
+
+/* ═══════════════ 创建 ═══════════════ */
+var draft=null;
+function create(){
+ var root=scene();draft={name:'',av:0,mood:0,custom:null,ids:shuffle(BANK.map(function(_,i){return i})).slice(0,10)};
+ var c=el('div','card');
+ c.innerHTML='<h2>先介绍一下这棵树的主人 🎅</h2><p class="sub">朋友要靠这 10 道题猜你，认真选哦</p>';
+ var nameIn=el('input','input');nameIn.placeholder='你的名字 / 昵称';nameIn.maxLength=12;c.appendChild(nameIn);
+ c.appendChild(el('label','lab','选一个你的形象'));
+ var avBox=el('div','chips');AVATARS.forEach(function(a,i){var b=el('button','chip'+(i===0?' on':''),a);
+  b.onclick=function(){avBox.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on')});b.classList.add('on');draft.av=i;sfxTap()};avBox.appendChild(b)});
+ c.appendChild(avBox);
+ c.appendChild(el('label','lab','圣诞心情贴纸'));
+ var mdBox=el('div','chips');MOODS.forEach(function(m,i){var b=el('button','chip'+(i===0?' on':''),m);
+  b.onclick=function(){mdBox.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on')});b.classList.add('on');draft.mood=i;sfxTap()};mdBox.appendChild(b)});
+ c.appendChild(mdBox);
+ c.appendChild(el('label','lab','题目'));
+ var modeBox=el('div','chips');
+ var b1=el('button','chip on','🎲 随机 10 题'),b2=el('button','chip','✏️ 自己出题');
+ modeBox.appendChild(b1);modeBox.appendChild(b2);c.appendChild(modeBox);
+ var customWrap=el('div');customWrap.style.display='none';
+ customWrap.appendChild(el('p','hint','每行一题，格式：问题 | 选项A | 选项B | 选项C<br>至少 2 个选项，写满 10 行；正确答案默认每项第一个，创建后你会逐题选。'));
+ var ta=el('textarea','input');ta.rows=6;ta.placeholder='你最爱吃什么？| 🍜 面 | 🍕 披萨\n你几点睡？| 🌙 凌晨 | 🌅 十点';
+ ta.style.fontSize='13px';customWrap.appendChild(ta);
+ var swap=btn('🔄 换一组随机题','ghost small',function(){draft.ids=shuffle(BANK.map(function(_,i){return i})).slice(0,10);toast('换好啦，重新开始答题吧')});
+ customWrap.appendChild(swap);c.appendChild(customWrap);
+ b1.onclick=function(){b1.classList.add('on');b2.classList.remove('on');customWrap.style.display='none';draft.custom=null};
+ b2.onclick=function(){b2.classList.add('on');b1.classList.remove('on');customWrap.style.display='block';sfxTap()};
+ var err=el('div','err');c.appendChild(err);
+ c.appendChild(btn('开始装饰 →','gold',function(){
+  draft.name=cleanName(nameIn.value);
+  if(!draft.name){err.textContent='先给自己起个名字吧 🎄';nameIn.focus();return}
+  if(b2.classList.contains('on')){
+   var qs=parseCustom(ta.value);
+   if(qs.length<3){err.textContent='自己出题至少要写 3 行（推荐 10 行）';return}
+   draft.custom=qs.slice(0,10);draft.ids=null;
+  }
+  sfxTap();decorate();
+ }));
+ root.appendChild(c);
+ root.appendChild(el('p','foot','每题答完都会点亮树上的一层灯 💡'));
+ nameIn.focus();
+}
+function decorate(){
+ var root=scene('is-decorate');
+ var t=makeTree({});t.wrap.style.setProperty('--tree-h','min(40vh,360px)');root.appendChild(t.wrap);
+ var qs=draft.custom?draft.custom.map(function(x){return {q:x[0],o:x[1],a:0}}):
+   draft.ids.map(function(id){return {q:BANK[id].q,o:BANK[id].o,a:0}});
+ var panel=el('div','card');
+ var ribbon=el('div','ribbon','装饰 1 / '+qs.length);panel.appendChild(ribbon);
+ var meter=el('div','meter');for(var i=0;i<qs.length;i++)meter.appendChild(el('i'));panel.appendChild(meter);
+ var qtext=el('div','qtext'),opts=el('div','opts'),fb=el('div','feedback');
+ panel.appendChild(qtext);panel.appendChild(opts);panel.appendChild(fb);root.appendChild(panel);
+ var k=0,answers=[],locked=false;
+ function render(){
+  var q=qs[k];ribbon.textContent='装饰 '+(k+1)+' / '+qs.length;
+  qtext.innerHTML=esc(q.q.replace(/\{name\}/g,'你'));
+  opts.className='opts'+(q.o.length===3?' one':'');opts.innerHTML='';
+  q.o.forEach(function(o,idx){
+   var b=el('button','opt',esc(o));
+   b.onclick=function(){if(locked)return;locked=true;sfxTap();
+    answers.push(idx);b.classList.add('picked');
+    meter.children[k].classList.add('on');
+    t.place(makeDeco(k+1),decoPoint(k+1));t.light(k+1,true);t.sparkle(decoPoint(k+1),7);
+    tone(523+k*40,.2,'sine',.05);
+    fb.className='feedback ok';fb.textContent=['🎄 挂好啦！','✨ 又亮一层','🔔 叮～','🎁 真好看'][k%4];
+    setTimeout(next,620);
+   };opts.appendChild(b);
+  });
+ }
+ function next(){k++;locked=false;fb.textContent='';if(k>=qs.length){return finish()}render()}
+ function finish(){
+  var q;
+  if(draft.custom){q={v:1,n:draft.name,av:draft.av,m:draft.mood,q:[],c:draft.custom.map(function(x,i){return [x[0],x[1],answers[i]]})}}
+  else{q={v:1,n:draft.name,av:draft.av,m:draft.mood,q:draft.ids.map(function(id,i){return [id,answers[i]]})}}
+  var code=packQuiz(q);
+  store('xm_quiz',{code:code,q:q});
+  t.lightAll();t.star(true);t.confetti();sfxWin('top');
+  var done=el('div','card');
+  done.innerHTML='<div class="result-hero">🎄✨</div><h2>你的树亮起来啦！</h2><p class="sub">'+esc(draft.name)+' 的 10 个答案已经藏进专属链接，<br>朋友要来猜你啦。</p>';
+  done.appendChild(btn('生成分享链接 →','gold',function(){share(code,q,true)}));
+  done.appendChild(btn('先看看我的树','ghost small',function(){myTree()}));
+  root.appendChild(done);done.scrollIntoView({behavior:'smooth',block:'center'});
+ }
+ render();
+}
+
+/* ═══════════════ 分享 ═══════════════ */
+function share(code,q,fresh){
+ var root=scene();
+ var t=makeTree({lit:true,starred:true});t.wrap.style.setProperty('--tree-h','min(34vh,300px)');root.appendChild(t.wrap);
+ t.host(q.av,q.n+' 的树 🎄');
+ var c=el('div','card');
+ var fileWarn=location.protocol==='file:'?'<div class="share-note" style="background:#ffe3db;color:#a2382a">⚠️ 你现在是用本地文件打开的，链接以 <b>file://</b> 开头，朋友点不开。请把这个网页发布/部署到网上，再用线上地址生成链接；或者直接把 index.html 文件本身发给朋友。</div>':'';
+ c.innerHTML='<h2>'+(fresh?'树已挂好，等朋友来 🎄':'把链接发给朋友')+'</h2>'+
+  '<p class="sub">每答对一题，朋友的名字球就升高一层。<br>越懂你，挂得越高 ✨</p>'+fileWarn;
+ var link=quizURL(code);
+ c.appendChild(el('div','codebox',esc(link)));
+ c.appendChild(btn('📋 复制分享链接','gold',function(){copy(link)}));
+ var row=el('div','btn-row');
+ row.appendChild(btn('📝 复制邀请文案','ghost small',function(){copy('🎄 我的圣诞树上，你在哪儿？来猜猜这 10 道关于我的题，看看你能挂多高 ✨\n'+link,'邀请文案已复制 💌')}));
+ row.appendChild(btn('🧪 本机试玩','ghost small',function(){location.hash='t='+code}));
+ c.appendChild(row);
+ c.appendChild(el('div','share-note','💡 <b>没有服务器也能同步</b>：朋友答完会得到一串「结果码」，让 TA 发回给你，你在「我的树」里粘贴导入，球就挂上树并进入排行榜。'));
+ c.appendChild(btn('🎄 查看我的树','red',function(){myTree()}));
+ c.appendChild(btn('← 回首页','ghost small',function(){location.hash=''}));
+ c.appendChild(el('p','hint','独立编写的学习/娱乐作品，与 Cloudz.fun 无关联 · 不收集任何数据'));
+ root.appendChild(c);
+ var fl=store('xm_quiz');if(fl&&fl.q)fresh=fresh;
+}
+
+/* ═══════════════ 朋友答题 ═══════════════ */
+function play(code){
+ var q;try{q=unpackQuiz(code)}catch(e){toast('链接好像坏了 😢');landing();return}
+ var qs=questionsOf(q),id=quizId(code);
+ var played=store('xm_played_'+id);
+ if(played){showResult(q,played,code,false);return}
+ var root=scene();
+ var t=makeTree({});t.wrap.style.setProperty('--tree-h','min(40vh,360px)');root.appendChild(t.wrap);
+ var host=t.host(q.av,'');
+ var intro=el('div','card');
+ intro.innerHTML='<div class="result-hero">🎄</div><h2>'+esc(q.n)+' 的圣诞树</h2>'+
+  '<p class="sub">树上有 10 个空钩子。<br>猜对 '+esc(q.n)+' 的选择，你的名字球就能往上爬一层 ✨<br>'+esc(MOODS[q.m||0])+'</p>';
+ var nameIn=el('input','input');nameIn.placeholder='先写上你的名字';nameIn.maxLength=12;intro.appendChild(nameIn);
+ var err=el('div','err');intro.appendChild(err);
+ intro.appendChild(btn('我准备好了 →','gold',function(){
+  var nm=cleanName(nameIn.value);if(!nm){err.textContent='写个名字，球上要刻名字的 🎄';nameIn.focus();return}
+  sfxTap();startClimb(q,code,nm);
+ }));
+ root.appendChild(intro);nameIn.focus();
+}
+function startClimb(q,code,friend){
+ var qs=questionsOf(q),id=quizId(code);
+ var root=scene();
+ var t=makeTree({});t.wrap.style.setProperty('--tree-h','min(42vh,380px)');root.appendChild(t.wrap);
+ var host=t.host(q.av,'');
+ var panel=el('div','card');
+ var ribbon=el('div','ribbon','第 1 / '+qs.length+' 题');panel.appendChild(ribbon);
+ var meter=el('div','meter');for(var m=0;m<qs.length;m++)meter.appendChild(el('i'));panel.appendChild(meter);
+ var qtext=el('div','qtext'),opts=el('div','opts'),fb=el('div','feedback');
+ panel.appendChild(qtext);panel.appendChild(opts);panel.appendChild(fb);root.appendChild(panel);
+ var ball=makeBauble(friend,{friend:true});t.place(ball,[IN_BOX[0],IN_BOX[1]-90]);
+ var notch=0,k=0,answers=[],locked=false;
+ function bubble(txt,ms){var b=$('.bubble',t.el);if(!b){b=el('span','bubble',esc(txt));t.el.appendChild(b)}else b.textContent=txt;
+  if(ms)setTimeout(function(){var x=$('.bubble',t.el);if(x)x.remove()},ms)}
+ function ask(){
+  var item=qs[k];locked=false;fb.textContent='';fb.className='feedback';
+  ribbon.textContent='第 '+(k+1)+' / '+qs.length+' 题';
+  qtext.innerHTML=esc(item.q.replace(/\{name\}/g,q.n));
+  opts.className='opts'+(item.o.length===3?' one':'');opts.innerHTML='';
+  item.o.forEach(function(o,idx){
+   var b=el('button','opt',esc(o));
+   b.onclick=function(){if(locked)return;locked=true;sfxTap();
+    answers.push(idx);b.classList.add('picked');
+    var right=idx===item.a;
+    setTimeout(function(){
+     if(right){
+      notch++;b.classList.add('right');b.appendChild(el('span','flag','✅'));
+      var pt=notchPoint(notch);t.place(ball,pt);t.light(notch,true);
+      meter.children[notch-1].classList.add('on');t.sparkle(pt,10);sfxRight(notch);
+      fb.className='feedback ok';fb.textContent=['答对！升高一层 ✨','bingo！继续往上 🎄','太懂我了 🥹','再来！'][notch%4];
+      bubble(['厉害！','哇哦','继续继续','就快到顶了'][Math.min(3,Math.floor(notch/3))],1400);
+     }else{
+      b.classList.add('wrong');b.appendChild(el('span','flag','❌'));
+      var good=opts.children[item.a];if(good&&good!==b){good.classList.add('answer');good.appendChild(el('span','flag','✅'))}
+      ball.classList.add('shake');setTimeout(function(){ball.classList.remove('shake')},480);
+      sfxWrong();fb.className='feedback no';fb.textContent='差一点！正确答案是「'+item.o[item.a]+'」';
+      bubble('嘿嘿，猜错了',1400);
+     }
+     setTimeout(next,right?1150:1450);
+    },380);
+   };opts.appendChild(b);
+  });
+ }
+ function next(){
+  k++;
+  if(k<qs.length){ask();return}
+  finish();
+ }
+ function finish(){
+  var score=scoreOf(q,answers),zone=zoneOf(score);
+  t.lightAll();t.star(score>=9);
+  if(score>=9){t.place(ball,TOP_HOOK);ball.classList.add('gold');t.confetti()}
+  else if(zone==='front')t.place(ball,FRONT_SPOT);
+  else if(zone==='bottom')t.place(ball,LOW_BRANCH);
+  else t.place(ball,TINY_TWIG);
+  bubble(score>=9?'你居然全答对了！':'欢迎上树 🎄',2600);
+  sfxWin(zone);
+  var p={name:friend,score:score,zone:zone,answers:answers,at:Date.now()};
+  store('xm_played_'+id,p);
+  setTimeout(function(){showResult(q,p,code,true)},1500);
+ }
+ ask();
+}
+
+/* ═══════════════ 结果页 ═══════════════ */
+function showResult(q,p,code,fresh){
+ var root=scene();
+ var t=makeTree({lit:true,starred:p.score>=9});t.wrap.style.setProperty('--tree-h','min(40vh,360px)');root.appendChild(t.wrap);
+ var spot=p.score>=9?TOP_HOOK:p.zone==='front'?FRONT_SPOT:p.zone==='bottom'?LOW_BRANCH:TINY_TWIG;
+ var ball=makeBauble(p.name,{friend:true,gold:p.score>=10});t.place(ball,spot);
+ t.host(q.av,p.score>=9?'你到星星旁边了！':'明年再战 😌');
+ if(fresh){t.confetti();sfxWin(p.zone)}
+ var e=ENDINGS[p.zone],c=el('div','card');
+ c.innerHTML='<div class="result-hero">'+e.emoji+'</div><div class="end-title">'+esc(e.title)+'</div>'+
+  '<div class="end-score">'+p.score+'<small> / '+questionsOf(q).length+' 题答对</small></div>'+
+  '<p class="end-desc">'+esc(e.desc)+'</p><p style="text-align:center;margin:10px 0 16px"><span class="badge">'+esc(ZONE_LABEL[p.zone])+'</span></p>';
+ var rc='XMASTREE1.'+b64e([quizId(code),p.name,p.answers,p.at]);
+ var rl=location.href.split('#')[0]+'#r='+rc.replace('XMASTREE1.','');
+ c.appendChild(el('div','share-note','🎁 把<b>结果码</b>发回给 '+esc(q.n)+'，TA 导入后你才会出现在那棵树上：'));
+ c.appendChild(el('div','codebox',esc(rc)));
+ c.appendChild(btn('📋 复制结果码','gold',function(){copy(rc,'结果码已复制，发给 '+q.n+' 吧 🎄')}));
+ var row=el('div','btn-row');
+ row.appendChild(btn('🔗 复制结果链接','ghost small',function(){copy(rl,'结果链接已复制 🔗')}));
+ row.appendChild(btn('🎄 我的树','ghost small',function(){myTree()}));
+ c.appendChild(row);
+ c.appendChild(btn('我也做一棵自己的树 →','red',function(){location.hash='';setTimeout(create,60)}));
+ c.appendChild(btn('↻ 再猜一次（清掉本机记录）','ghost small',function(){store('xm_played_'+quizId(code),null);location.hash='t='+code}));
+ root.appendChild(c);
+ root.appendChild(el('p','foot','位置由答对题数决定：9–10 树顶 · 7–8 C 位 · 5–6 低枝 · 0–4 礼物盒<br>独立编写的娱乐作品 · 与 Cloudz.fun 无关联'));
+}
+
+/* ═══════════════ 主人看板 ═══════════════ */
+function myTree(){
+ var saved=store('xm_quiz');
+ if(!saved){toast('你还没有自己的树，先装饰一棵吧 🎄');create();return}
+ var q=saved.q,code=saved.code,id=quizId(code);
+ var root=scene();
+ var t=makeTree({lit:true,starred:true});t.wrap.style.setProperty('--tree-h','min(52vh,470px)');root.appendChild(t.wrap);
+ t.host(q.av,q.n+' 的树 🎄');
+ var friends=getFriends(id).slice().sort(function(a,b){return b.score-a.score||a.at-b.at});
+ root.appendChild(el('h1','hero-title','谁在 '+esc(q.n)+' 的树上？🎄'));
+ root.appendChild(el('p','hero-sub',friends.length?'已经有 '+friends.length+' 位朋友找到位置了':'还没有朋友上榜，把链接发出去吧'));
+ // 挂球
+ var used={top:0,front:0,bottom:0,box:0};
+ friends.forEach(function(f,i){
+  var s=spotFor(f.zone,used[f.zone]++),b=makeBauble(f.name,{small:s.small,gold:f.score>=10,tag:s.small?null:ZONE_LABEL[f.zone]});
+  t.place(b,s.pt);
+ });
+ if(!friends.length){var ghost=makeBauble('?',{small:true});t.place(ghost,spotFor('front',0).pt)}
+ var c=el('div','card');
+ c.innerHTML='<h2>🏆 知己排行榜</h2><p class="sub">越懂你，挂得越高</p>';
+ var board=el('div','board');
+ if(!friends.length)board.appendChild(el('p','empty','空空如也～ 等朋友把结果码发回来 📭'));
+ friends.forEach(function(f,i){
+  var col=colorOf(f.name),r=el('div','row'+((f.you)?' you':''));
+  r.innerHTML='<span class="rank">'+(i+1)+'</span><span class="mini" style="--b1:'+col[0]+';--b2:'+col[1]+'"></span>'+
+   '<span class="main"><strong>'+esc(f.name)+'</strong><span class="meta"><span class="zone">'+esc(ZONE_LABEL[f.zone])+'</span><span class="score">'+f.score+'/'+questionsOf(q).length+'</span></span></span>';
+  var del=el('button','del','×');del.title='移除';del.onclick=function(){
+   var list=getFriends(id).filter(function(x){return x.at!==f.at||x.name!==f.name});store(friendsKey(id),list);myTree()};
+  r.appendChild(del);board.appendChild(r);
+ });
+ c.appendChild(board);
+ c.appendChild(btn('📥 粘贴朋友的结果码','gold',function(){importPrompt(code)}));
+ var row=el('div','btn-row');
+ row.appendChild(btn('🔗 再复制分享链接','ghost small',function(){copy(quizURL(code))}));
+ row.appendChild(btn('🧪 本机试玩','ghost small',function(){location.hash='t='+code}));
+ c.appendChild(row);
+ c.appendChild(btn('🌲 看看示例树（挂满朋友）','ghost small',function(){demo()}));
+ c.appendChild(btn('← 回首页','ghost small',function(){location.hash=''}));
+ root.appendChild(c);
+ root.appendChild(el('p','foot','朋友记录保存在本机浏览器 · 换设备不会同步（这就是没有服务器的代价 😉）'));
+}
+
+/* ═══════════════ 导入结果码 ═══════════════ */
+function importPrompt(code){
+ var saved=store('xm_quiz');
+ if(!code&&!saved){toast('先创建自己的树，才能收录朋友哦 🎄');return}
+ code=code||saved.code;
+ var ov=el('div','overlay'),c=el('div','card');
+ c.innerHTML='<h2>📥 收录一位朋友</h2><p class="sub">把朋友发来的「结果码」整段粘贴进来<br>系统会用你的原始答案重新算分，改不了分 ✨</p>';
+ var ta=el('textarea','input');ta.rows=4;ta.placeholder='XMASTREE1.eyJ2IjoxLCJuIjoi...';ta.style.fontSize='12px';c.appendChild(ta);
+ var err=el('div','err');c.appendChild(err);
+ c.appendChild(btn('挂到我的树上 🎄','gold',function(){
+  var raw=ta.value.trim();if(!raw){err.textContent='先粘贴结果码';return}
+  try{
+   var body=raw.replace(/^XMASTREE1\./,''),d=b64d(body);
+   if(!Array.isArray(d)||d.length<3)throw new Error('bad');
+   if(d[0]!==quizId(code)){err.textContent='这串结果码不是给你的这棵树的 😯';return}
+   var answers=d[2];if(!Array.isArray(answers)||answers.length!==questionsOf(saved.q).length)throw new Error('bad');
+   var score=scoreOf(saved.q,answers),name=cleanName(d[1])||'匿名朋友';
+   if(getFriends(quizId(code)).some(function(f){return f.name===name&&f.at===d[3]})){err.textContent='这位朋友已经在树上了 ✅';return}
+   addFriend(quizId(code),{name:name,score:score,zone:zoneOf(score),answers:answers,at:d[3]||Date.now()});
+   ov.remove();tone(784,.25,'sine',.06);toast('🎄 '+name+' 挂上树啦！');myTree();
+  }catch(e){err.textContent='结果码看不懂，检查一下有没有复制完整'}
+ }));
+ c.appendChild(btn('取消','ghost small',function(){ov.remove()}));
+ ov.appendChild(c);document.body.appendChild(ov);ov.onclick=function(e){if(e.target===ov)ov.remove()};
+ setTimeout(function(){ta.focus()},80);
+}
+function importFromHash(raw){
+ var saved=store('xm_quiz');
+ if(!saved){toast('先创建自己的树，才能收录朋友哦 🎄');landing();return}
+ try{
+  var d=b64d(raw),code=saved.code;
+  if(d[0]!==quizId(code)){toast('这串结果码不是给你的这棵树的 😯');landing();return}
+  var answers=d[2],name=cleanName(d[1])||'匿名朋友';
+  if(!getFriends(quizId(code)).some(function(f){return f.name===name&&f.at===d[3]}))
+   addFriend(quizId(code),{name:name,score:scoreOf(saved.q,answers),zone:zoneOf(scoreOf(saved.q,answers)),answers:answers,at:d[3]||Date.now()});
+  toast('🎄 '+name+' 已挂上树！');myTree();
+ }catch(e){toast('结果链接好像坏了');landing()}
+ location.hash='';
+}
+
+/* ═══════════════ 演示 ═══════════════ */
+function demo(){
+ var q={v:1,n:'小云',av:0,m:0,q:BANK.map(function(_,i){return [i,i%2]}).slice(0,10)};
+ var code=packQuiz(q),id=quizId(code),names=['小雨','阿哲','Momo','大熊','橙子','七月','阿宅','Lulu','小满','汤圆'];
+ var scores=[10,10,9,8,7,6,5,4,2,1];
+ var list=names.map(function(n,i){var a=[];for(var k=0;k<10;k++)a.push((k<scores[i])?k%2:1-(k%2));
+  return {name:n,score:scores[i],zone:zoneOf(scores[i]),answers:a,at:i}});
+ var root=scene();
+ var t=makeTree({lit:true,starred:true});t.wrap.style.setProperty('--tree-h','min(54vh,490px)');root.appendChild(t.wrap);
+ t.host(0,'小云 的树 🎄');
+ var used={top:0,front:0,bottom:0,box:0};
+ list.forEach(function(f){var s=spotFor(f.zone,used[f.zone]++),b=makeBauble(f.name,{small:s.small,gold:f.score>=10,tag:s.small?null:ZONE_LABEL[f.zone]});t.place(b,s.pt)});
+ root.appendChild(el('h1','hero-title','挂满朋友的树 🎄'));
+ root.appendChild(el('p','hero-sub','演示：10 位朋友分布在四个区域'));
+ var c=el('div','card');c.innerHTML='<h2>🏆 知己排行榜</h2><p class="sub">满分的球是金色的，挂在星星旁边</p>';
+ var bd=el('div','board');
+ list.forEach(function(f,i){var col=colorOf(f.name),r=el('div','row');
+  r.innerHTML='<span class="rank">'+(i+1)+'</span><span class="mini" style="--b1:'+col[0]+';--b2:'+col[1]+'"></span>'+
+   '<span class="main"><strong>'+esc(f.name)+'</strong><span class="meta"><span class="zone">'+esc(ZONE_LABEL[f.zone])+'</span><span class="score">'+f.score+'/10</span></span></span>';
+  bd.appendChild(r)});
+ c.appendChild(bd);
+ c.appendChild(btn('🎄 也做一棵我自己的树','gold',function(){create()}));
+ c.appendChild(btn('← 回首页','ghost small',function(){location.hash=''}));
+ root.appendChild(c);
+ t.confetti();sfxWin('top');
+}
+
+/* ═══════════════ 雪花 & 路由 ═══════════════ */
+(function snow(){
+ var box=$('#snow');
+ for(var i=0;i<32;i++){var f=el('span','flake','❄');
+  f.style.left=(Math.random()*100)+'%';f.style.fontSize=(7+Math.random()*12)+'px';
+  f.style.animationDuration=(7+Math.random()*11)+'s';f.style.animationDelay=(-Math.random()*14)+'s';
+  f.style.opacity=(.25+Math.random()*.5);box.appendChild(f)}
+})();
+function route(){
+ var h=location.hash.replace(/^#/,'');
+ if(h.indexOf('t=')===0){play(h.slice(2));return}
+ if(h.indexOf('r=')===0){importFromHash(h.slice(2));return}
+ if(h==='demo'){demo();return}
+ landing();
+}
+window.addEventListener('hashchange',route);
+route();
+})();
+</script>
+</body>
+</html>
